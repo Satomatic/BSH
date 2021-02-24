@@ -1,7 +1,8 @@
 # BSH
 A simple shell written in C for research purposes
 
-![Code Grade](https://www.code-inspector.com/project/19446/score/svg)
+[![Code Grade](https://www.code-inspector.com/project/19446/score/svg#1)](https://frontend.code-inspector.com/public/project/19446/BSH/dashboard)\
+[![Code Grade](https://www.code-inspector.com/project/19446/status/svg#1)](https://frontend.code-inspector.com/public/project/19446/BSH/dashboard)
 
 <img src="https://i.imgur.com/tGnivG3.png" width="400">\
 **BSH running on MacOS in ITerm2**
