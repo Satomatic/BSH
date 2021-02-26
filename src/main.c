@@ -51,8 +51,7 @@ int main (int argc, char** argv){
 		/*
 			Take in user input
 		*/
-		char input[512];
-		fgets(input, 512, stdin);
+		char* input = getInput(512);
 		char** array = splitline(input);
 		if (array[0] == NULL) continue;
 
@@ -73,6 +72,7 @@ int main (int argc, char** argv){
 		}
 
 		free(array);
+		free(input);
 	}
 
 	return 0;
