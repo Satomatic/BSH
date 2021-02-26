@@ -36,6 +36,11 @@ char **splitline(char *line){
 
 char* getInput(int buffer_size){
 	char* buffer = malloc(sizeof(char) * buffer_size);
+	
+	for (int i = 0; i < buffer_size; i++){
+		buffer[i] = '\0';
+	}
+	
 	int bufferLength = 0;
 	int bufferIndex = 0;
 
