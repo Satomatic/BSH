@@ -16,9 +16,9 @@ This project was made possible by studying the code of [`lsh`](https://github.co
 
 ## Features
 - [x] Basic input and execute
-- [ ] Better input
+- [x] Better input
 - [ ] Better parsing
-- [ ] Command history
+- [x] Command history
 - [ ] Tab auto complete
 - [ ] Config file
 - [ ] Support for ^Z (currently disabled)
