@@ -35,10 +35,17 @@ void exec(char** args){
 	}
 }
 
+char** command_history;
+int command_history_length = 0;
+int command_history_max = 5;
+
 int main (int argc, char** argv){
 	// disable signals for the main process
 	signal(SIGINT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
+
+	// allocate command history
+	command_history = malloc(sizeof(char*) * command_history_max);
 
 	while (1){
 		/*
@@ -74,6 +81,8 @@ int main (int argc, char** argv){
 		free(array);
 		free(input);
 	}
+
+	free(command_history);
 
 	return 0;
 

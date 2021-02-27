@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+#include "include/history.h"
+#include "include/global.h"
 #include "include/utils.h"
 
 char **splitline(char *line){
@@ -41,6 +44,7 @@ char* getInput(int buffer_size){
 		buffer[i] = '\0';
 	}
 	
+	int historyIndex = command_history_length;
 	int bufferLength = 0;
 	int bufferIndex = 0;
 
@@ -53,19 +57,60 @@ char* getInput(int buffer_size){
 			char a = getch();     // this is just the [ character
 			char b = getch();     // this is the actual data
 
-			if (b == 'A'){        // up
+			/*
+				Up / Down Arrow
+			*/
+			if (b == 'A' || b == 'B'){
+				if (bufferIndex > 0){
+					printf("\033[%iD", bufferIndex);
+				}
 
-			} else if (b == 'B'){ // down
+				// Up arrow
+				if (b == 'A'){
+					if (historyIndex > 0){
+						historyIndex --;
+					}
+					strcpy(buffer, command_history[historyIndex]);
 
+				// Down arrow
+				} else {
+					if (historyIndex < command_history_length - 1){
+						historyIndex ++;
+					}
+					strcpy(buffer, command_history[historyIndex]);
+				}
 
-			} else if (b == 'C'){ // right
+				printf("%s ", buffer);
+
+				// Figure out the size difference between the old
+				// and new command in the buffer and blank it out
+				if (strlen(buffer) < bufferLength){
+					int difference = bufferLength - strlen(buffer);
+					for (int i = 0; i < difference; i++){
+						printf(" ");
+					}
+					printf("\033[%iD", difference);
+				}
+
+				// Update input values
+				bufferLength = strlen(buffer);
+				bufferIndex = bufferLength;
+
+				printf("\033[%iD\033[%iC", bufferLength, bufferIndex - 1);
+
+			/*
+				Left Arrow
+			*/
+			} else if (b == 'C'){
 				if (bufferIndex < buffer_size){
 					bufferIndex ++;
 					printf("\033[C");
 				}
 
-
-			} else if (b == 'D'){ // left
+			/*
+				Right Arrow
+			*/
+			} else if (b == 'D'){
 				if (bufferIndex > 0){
 					bufferIndex --;
 					printf("\033[D");
@@ -74,6 +119,13 @@ char* getInput(int buffer_size){
 
 		// return key
 		} else if (key == 10){
+			newEntry(buffer);
+
+			for (int i = 0; i < command_history_length; i++){
+				// printf("\033[%i;60H", i + 1);
+				// printf("%i : %s       ", i, command_history[i]);
+			}
+
 			printf("\n");
 			return buffer;
 		
