@@ -37,7 +37,7 @@ void exec(char** args){
 
 char** command_history;
 int command_history_length = 0;
-int command_history_max = 5;
+int command_history_max = 100;
 
 int main (int argc, char** argv){
 	// disable signals for the main process

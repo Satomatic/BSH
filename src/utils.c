@@ -36,12 +36,16 @@ char **splitline(char *line){
 	tokens[position] = NULL;
 	return tokens;
 }
-
+/*
+	This function is kinda long and smelly but it'll do
+*/
 char* getInput(int buffer_size){
+	char* bufferStore = malloc(sizeof(char) * buffer_size);
 	char* buffer = malloc(sizeof(char) * buffer_size);
-	
+
 	for (int i = 0; i < buffer_size; i++){
 		buffer[i] = '\0';
+		bufferStore[i] = '\0';
 	}
 	
 	int historyIndex = command_history_length;
@@ -67,6 +71,16 @@ char* getInput(int buffer_size){
 
 				// Up arrow
 				if (b == 'A'){
+					if (command_history_length == 0){
+						continue;
+					}
+
+					// Save buffer so it can be restored
+					if (historyIndex == command_history_length){
+						memset(bufferStore, 0, strlen(bufferStore));
+						strncpy(bufferStore, buffer, buffer_size);
+					}
+
 					if (historyIndex > 0){
 						historyIndex --;
 					}
@@ -76,8 +90,14 @@ char* getInput(int buffer_size){
 				} else {
 					if (historyIndex < command_history_length - 1){
 						historyIndex ++;
+						strcpy(buffer, command_history[historyIndex]);
+
+					// Restore the buffer
+					} else {
+						historyIndex = command_history_length;
+						memset(buffer, 0, strlen(buffer));
+					  	strcpy(buffer, bufferStore);
 					}
-					strcpy(buffer, command_history[historyIndex]);
 				}
 
 				printf("%s ", buffer);
@@ -153,7 +173,7 @@ char* getInput(int buffer_size){
 					free(after);
 
 				} else {
-					buffer[bufferIndex] = '\0';
+					buffer[bufferIndex - 1] = '\0';
 					bufferLength --;
 					bufferIndex --;
 					printf("\033[D \033[D");
