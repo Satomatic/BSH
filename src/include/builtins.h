@@ -1,5 +1,5 @@
-#ifndef _BSSH_BUILTINS_H
-#define _BSSH_BUILTINS_H
+#ifndef _BSH_BUILTINS_H
+#define _BSH_BUILTINS_H
 
 extern char *builtins_str[];
 extern void (*builtins_func[]) (char**);

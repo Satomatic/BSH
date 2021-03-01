@@ -1,5 +1,5 @@
-#ifndef BSSH_HISTORY_H_
-#define BSSH_HISTORY_H_
+#ifndef _BSH_HISTORY_H_
+#define _BSH_HISTORY_H_
 
 void newEntry(char* command);
 

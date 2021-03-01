@@ -6,6 +6,7 @@
 
 #include "include/builtins.h"
 #include "include/global.h"
+#include "include/parse.h"
 #include "include/utils.h"
 
 char promptTemplate[] = "( \033[38;5;80m%s\033[0m ) [ \033[38;5;177m%s\033[0m ] ~$ ";
@@ -59,8 +60,17 @@ int main (int argc, char** argv){
 			Take in user input
 		*/
 		char* input = getInput(512);
-		char** array = splitline(input);
+		char** array = splitInput(input);
+		parseInput(array);
+
 		if (array[0] == NULL) continue;
+
+		// this is for debugging, i use it often
+		// int i = 0;
+		// while (i < 3){
+		// 	printf("%i: %s\n", i, array[i]);
+		// 	i++;
+		// }
 
 		/*
 			Check for build in functions
