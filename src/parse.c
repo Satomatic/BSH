@@ -1,5 +1,7 @@
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <stdio.h>
 
 #include "include/parse.h"
@@ -30,13 +32,47 @@ char** splitInput(char* input){
 
 	int tokenmax = 100, tokenindex = 0;
 	char* token = malloc(sizeof(char) * tokenmax);
+	bool stringMode = false;
 
 	for (int i = 0; i < strlen(input); i++){
-		if (input[i] == '\\' && input[i + 1] == ' '){
+		if (input[i] == '$'){
+			// get length of env variable name
+			int start = i + 1;
+			int end = strlen(input);
+
+			// search for end of env variable
+			for (int x = start; x < strlen(input); x++){
+				if (!isalpha(input[x])){
+					end = x;
+					break;
+				}
+			}
+
+			char* envname = malloc(sizeof(char) * (end - start));
+			strncpy(envname, input+start, end-start);
+			char* value = getenv(envname);
+
+			// copy into the token
+			strcpy(token+tokenindex, value);
+			tokenindex += strlen(value);
+			i = end - 1;
+
+			free(envname);
+		
+		} else if (input[i] == '\\'){
+			if (
+				input[i + 1] == ' '  ||
+				input[i + 1] == '"'  ||
+				input[i + 1] == '\\'
+			){
+				token[tokenindex] = input[i + 1];
+				tokenindex ++;
+				i++;
+			}
+
+		} else if (input[i] == ' ' && stringMode == true){
 			token[tokenindex] = ' ';
 			tokenindex ++;
-
-			i++;
 
 		} else if (input[i] == ' '){
 			if (strlen(token) == 0) continue;
@@ -50,6 +86,9 @@ char** splitInput(char* input){
 			// clear current token
 			memset(token, 0, strlen(token));
 			tokenindex = 0;
+
+		} else if (input[i] == '"'){
+			stringMode = !stringMode;
 
 		} else {
 			token[tokenindex] = input[i];

@@ -8,5 +8,6 @@ int builtinlen();
 void bssh_builtin_cd(char** args);
 void bssh_builtin_help(char** args);
 void bssh_builtin_exit(char** args);
+void bssh_builtin_test(char** args);
 
 #endif

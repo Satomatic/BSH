@@ -6,13 +6,15 @@
 char *builtins_str[] = {
 	"cd",
 	"help",
-	"exit"
+	"exit",
+	"test"
 };
 
 void (*builtins_func[]) (char**) = {
 	&bssh_builtin_cd,
 	&bssh_builtin_help,
-	&bssh_builtin_exit
+	&bssh_builtin_exit,
+	&bssh_builtin_test
 };
 
 int builtinlen() {
@@ -39,4 +41,14 @@ void bssh_builtin_help(char** args){
 
 void bssh_builtin_exit(char** args){
 	exit(0);
+}
+
+void bssh_builtin_test(char** args){
+	printf("%s:\n", args[0]);
+
+	int i = 1;
+	while (args[i]){
+		printf("  %s\n", args[i]);
+		i++;
+	}
 }
