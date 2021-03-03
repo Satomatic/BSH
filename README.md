@@ -34,7 +34,7 @@ This project was made possible by studying the code of [`lsh`](https://github.co
 ## Build
 #### Unix
 BSH has been confirmed to work on Mac, Linux and other Unix Operating Systems. It can be compiled with the simple command:\
-`gcc -o bssh *.c`
+`gcc -o bsh *.c`
 
 #### Windows
 BSH has not been confirmed to compile or run on windows, however, it can still be used using WSL perfectly fine.

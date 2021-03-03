@@ -65,13 +65,6 @@ int main (int argc, char** argv){
 
 		if (array[0] == NULL) continue;
 
-		// this is for debugging, i use it often
-		// int i = 0;
-		// while (i < 3){
-		// 	printf("%i: %s\n", i, array[i]);
-		// 	i++;
-		// }
-
 		/*
 			Check for build in functions
 		*/

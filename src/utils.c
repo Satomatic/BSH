@@ -1,11 +1,45 @@
 #include <termios.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 #include <stdio.h>
 
 #include "include/history.h"
 #include "include/global.h"
 #include "include/utils.h"
+
+char** listdir(char* directory){
+	char** array = malloc(sizeof(char*));
+	int position = 0;
+
+	DIR *dir;
+	struct dirent *ent;
+
+	if ((dir = opendir (directory)) != NULL) {
+		while ((ent = readdir (dir)) != NULL) {
+			char* item = malloc(strlen(ent->d_name));
+			strcpy(item, ent->d_name);
+			
+			array = (char **) realloc(array, sizeof(char*) * (position + 2));
+			
+			array[position] = item;
+			position ++;
+		}
+		closedir (dir);
+	} else {
+		perror ("bsh");
+	}
+
+	array[position] = NULL;
+
+	return array;
+}
+
+const char* getextension(const char* filename){
+    const char *dot = strrchr(filename, '.');
+    if(!dot || dot == filename) return "";
+    return dot+1;
+}
 
 char **splitline(char *line){
 	int bufsize = 64, position = 0;
@@ -200,8 +234,6 @@ char* getInput(int buffer_size){
 
 					bufferIndex ++;
 					bufferLength ++;
-
-					printf("\033]0;%i\07", bufferIndex);
 
 					free(after);
 

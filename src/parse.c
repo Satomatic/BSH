@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "include/parse.h"
+#include "include/utils.h"
 
 char** parseInput(char** array){
 	int i = 0;
@@ -26,6 +27,19 @@ char** parseInput(char** array){
 	return array;
 }
 
+int nextToken(char* input, int start){
+	int end = strlen(input);
+
+	for (int i = start; i < strlen(input); i++){
+		if (!isalpha(input[i])){
+			end = i;
+			break;
+		}
+	}
+
+	return end;
+}
+
 char** splitInput(char* input){
 	int buffersize = 64, position = 0;
 	char** array = malloc(sizeof(char*) * buffersize);
@@ -38,15 +52,7 @@ char** splitInput(char* input){
 		if (input[i] == '$'){
 			// get length of env variable name
 			int start = i + 1;
-			int end = strlen(input);
-
-			// search for end of env variable
-			for (int x = start; x < strlen(input); x++){
-				if (!isalpha(input[x])){
-					end = x;
-					break;
-				}
-			}
+			int end = nextToken(input, start);
 
 			char* envname = malloc(sizeof(char) * (end - start));
 			strncpy(envname, input+start, end-start);
@@ -59,6 +65,50 @@ char** splitInput(char* input){
 
 			free(envname);
 		
+		} else if (input[i] == '*'){
+			int start = i + 2;
+			int end = nextToken(input, start);
+
+			// get file extension from token
+			char* fileext = malloc(sizeof(char) * (end - start) + 1);
+			memset(fileext, 0, sizeof(char) * (end - start));
+			strncpy(fileext, input+start, end-start);
+
+			char* directory = token;
+
+			// if no directory, give current
+			if (strlen(token) == 0){
+				directory = "./";
+			}
+
+			// get directory listing
+			char** listing = listdir(directory);
+
+			int x = 0;
+			while (listing[x] != NULL){
+				
+				const char* extension = getextension(listing[x]);
+
+				// if file has matching extension, insert as token
+				if (strcmp(extension, fileext) == 0 && strlen(extension) > 0){
+					char* temp = malloc(sizeof(char) * strlen(listing[x]));
+					strcpy(temp, listing[x]);
+
+					array[position] = temp;
+					position ++;
+				}
+
+				x++;
+			}
+
+			i = end - 1;
+
+			// clear the rest of the token as we are done with it
+			memset(token, 0, strlen(token));
+			tokenindex = 0;
+			
+			free(fileext);
+
 		} else if (input[i] == '\\'){
 			if (
 				input[i + 1] == ' '  ||
