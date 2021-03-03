@@ -4,5 +4,6 @@
 extern char** command_history;
 extern int command_history_length;
 extern int command_history_max;
+extern int debug;
 
 #endif

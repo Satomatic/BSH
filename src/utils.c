@@ -17,15 +17,24 @@ char** listdir(char* directory){
 
 	if ((dir = opendir (directory)) != NULL) {
 		while ((ent = readdir (dir)) != NULL) {
+			// copy filename into new string
 			char* item = malloc(strlen(ent->d_name));
 			strcpy(item, ent->d_name);
 			
 			array = (char **) realloc(array, sizeof(char*) * (position + 2));
 			
+			// free array on failure
+			if (array == NULL){
+				free(array);
+				return array;
+			}
+
+			// insert item
 			array[position] = item;
 			position ++;
 		}
 		closedir (dir);
+
 	} else {
 		perror ("bsh");
 	}
@@ -41,35 +50,6 @@ const char* getextension(const char* filename){
     return dot+1;
 }
 
-char **splitline(char *line){
-	int bufsize = 64, position = 0;
-	char **tokens = malloc(bufsize * sizeof(char*));
-	char *token;
-
-	if (!tokens) {
-		fprintf(stderr, "lsh: allocation error\n");
-		exit(EXIT_FAILURE);
-	}
-
-	token = strtok(line, " \t\r\n\a");
-	while (token != NULL) {
-		tokens[position] = token;
-		position++;
-
-		if (position >= bufsize) {
-			bufsize += 64;
-			tokens = realloc(tokens, bufsize * sizeof(char*));
-			if (!tokens) {
-				fprintf(stderr, "lsh: allocation error\n");
-				exit(EXIT_FAILURE);
-			}
-		}
-
-		token = strtok(NULL, " \t\r\n\a");
-	}
-	tokens[position] = NULL;
-	return tokens;
-}
 /*
 	This function is kinda long and smelly but it'll do
 */
@@ -175,11 +155,6 @@ char* getInput(int buffer_size){
 		} else if (key == 10){
 			newEntry(buffer);
 
-			for (int i = 0; i < command_history_length; i++){
-				// printf("\033[%i;60H", i + 1);
-				// printf("%i : %s       ", i, command_history[i]);
-			}
-
 			printf("\n");
 			return buffer;
 		
@@ -226,9 +201,12 @@ char* getInput(int buffer_size){
 					buffer[bufferIndex] = key;
 					strncpy(buffer+bufferIndex+1, after, copySize);
 
-					// TODO: Convert this into one big print
-					printf("\033[%iD", bufferIndex); // move cursor back
-					printf("%s", buffer);            // print buffer
+					// if cursor is at beginning of line
+					if (bufferIndex > 0){
+						printf("\033[%iD", bufferIndex);
+					}
+
+					printf("%s", buffer);
 					printf("\033[%iD", bufferLength + 1);
 					printf("\033[%iC", bufferIndex + 1);
 

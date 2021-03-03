@@ -40,6 +40,19 @@ int nextToken(char* input, int start){
 	return end;
 }
 
+void newToken(char** array, char* token, int* position, int* tokenindex){
+	// make copy of token
+	char* temp = malloc(sizeof(char) * strlen(token));
+	strcpy(temp, token);
+	array[*position] = temp;
+
+	// clear current token
+	memset(token, 0, strlen(token));
+
+	*tokenindex = 0;
+	*position += 1;
+}
+
 char** splitInput(char* input){
 	int buffersize = 64, position = 0;
 	char** array = malloc(sizeof(char*) * buffersize);
@@ -86,16 +99,11 @@ char** splitInput(char* input){
 
 			int x = 0;
 			while (listing[x] != NULL){
-				
-				const char* extension = getextension(listing[x]);
-
 				// if file has matching extension, insert as token
+				const char* extension = getextension(listing[x]);
+				
 				if (strcmp(extension, fileext) == 0 && strlen(extension) > 0){
-					char* temp = malloc(sizeof(char) * strlen(listing[x]));
-					strcpy(temp, listing[x]);
-
-					array[position] = temp;
-					position ++;
+					newToken(array, listing[x], &position, &tokenindex);
 				}
 
 				x++;
@@ -103,10 +111,6 @@ char** splitInput(char* input){
 
 			i = end - 1;
 
-			// clear the rest of the token as we are done with it
-			memset(token, 0, strlen(token));
-			tokenindex = 0;
-			
 			free(fileext);
 
 		} else if (input[i] == '\\'){
@@ -124,18 +128,8 @@ char** splitInput(char* input){
 			token[tokenindex] = ' ';
 			tokenindex ++;
 
-		} else if (input[i] == ' '){
-			if (strlen(token) == 0) continue;
-
-			// make copy of token
-			char* temp = malloc(sizeof(char) * strlen(token));
-			strcpy(temp, token);
-			array[position] = temp;
-			position ++;
-
-			// clear current token
-			memset(token, 0, strlen(token));
-			tokenindex = 0;
+		} else if (input[i] == ' ' && strlen(token) != 0){
+			newToken(array, token, &position, &tokenindex);
 
 		} else if (input[i] == '"'){
 			stringMode = !stringMode;
@@ -147,15 +141,7 @@ char** splitInput(char* input){
 	}
 
 	if (strlen(token) > 0){
-		// make copy of token
-		char* temp = malloc(sizeof(char) * strlen(token));
-		strcpy(temp, token);
-		array[position] = temp;
-		position ++;
-
-		// clear current token
-		memset(token, 0, strlen(token));
-		tokenindex = 0;
+		newToken(array, token, &position, &tokenindex);
 	}
 
 	array[position] = NULL;

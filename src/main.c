@@ -39,8 +39,13 @@ void exec(char** args){
 char** command_history;
 int command_history_length = 0;
 int command_history_max = 100;
+int debug = 0;
 
 int main (int argc, char** argv){
+	if (strcmp(argv[0], "a.out") == 0){
+		debug = 1;
+	}
+
 	// disable signals for the main process
 	signal(SIGINT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
@@ -52,6 +57,10 @@ int main (int argc, char** argv){
 		/*
 			Display prompt
 		*/
+		if (debug == 1){
+			printf("( \033[38;5;42m%s\033[0m ) ", "debug");
+		}
+
 		const char* user = getenv("USER");
 		const char* cdir = getcwd(NULL,0);
 		printf(promptTemplate, user, cdir);
