@@ -13,7 +13,7 @@ void newEntry(char* command){
 	*/
 	int f = 0;
 	for (int i = 0; i < strlen(command); i++){
-		if (isalpha(command[i])){
+		if (isalpha(command[i]) || ispunct(command[i])){
 			f = 1;
 			break;
 		}
