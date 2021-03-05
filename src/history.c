@@ -48,9 +48,10 @@ void newEntry(char* command){
 		Else it will just make a new entry into the history.
 	*/
 	} else {
-
-		char* entry = malloc(sizeof(char) * strlen(command));
+		char* entry = malloc(sizeof(char) * strlen(command) + 1);
+		memset(entry, 0, strlen(command) + 1);
 		strcpy(entry, command);
+
 		command_history[command_history_length] = entry;
 		command_history_length ++;
 

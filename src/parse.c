@@ -35,10 +35,11 @@ void newToken(char** array, char* token, int* position, int* tokenindex){
 
 char** splitInput(char* input){
 	int buffersize = 64, position = 0;
-	char** array = malloc(sizeof(char*) * buffersize);
-
 	int tokenmax = 100, tokenindex = 0;
+
+	char** array = malloc(sizeof(char*) * buffersize);
 	char* token = malloc(sizeof(char) * tokenmax);
+
 	bool stringMode = false;
 
 	for (int i = 0; i < strlen(input); i++){

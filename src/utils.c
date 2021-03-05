@@ -83,7 +83,6 @@ char* getInput(int buffer_size){
 	int bufferIndex = 0;
 
 	while (1){
-
 		char key = getch();
 
 		// special key (Arrow keys etc...)
@@ -114,6 +113,7 @@ char* getInput(int buffer_size){
 					if (historyIndex > 0){
 						historyIndex --;
 					}
+
 					strcpy(buffer, command_history[historyIndex]);
 
 				// Down arrow
@@ -169,6 +169,7 @@ char* getInput(int buffer_size){
 
 		// return key
 		} else if (key == 10){
+			buffer[bufferLength] = '\0';
 			newEntry(buffer);
 
 			printf("\n");
