@@ -9,6 +9,9 @@
 #include "include/utils.h"
 
 char** listdir(char* directory){
+	/*
+		Initial allocation of array
+	*/
 	char** array = malloc(sizeof(char*));
 	int position = 0;
 
@@ -17,19 +20,29 @@ char** listdir(char* directory){
 
 	if ((dir = opendir (directory)) != NULL) {
 		while ((ent = readdir (dir)) != NULL) {
-			// copy filename into new string
+			
+			/*
+				Copy file name into a string
+			*/
 			char* item = malloc(strlen(ent->d_name));
 			strcpy(item, ent->d_name);
 			
+			/*
+				Reallocate array with extended size
+			*/
 			array = (char **) realloc(array, sizeof(char*) * (position + 2));
 			
-			// free array on failure
+			/*
+				free array if realloc fails
+			*/
 			if (array == NULL){
 				free(array);
 				return array;
 			}
-
-			// insert item
+			
+			/*
+				Insert item
+			*/
 			array[position] = item;
 			position ++;
 		}
@@ -39,6 +52,9 @@ char** listdir(char* directory){
 		perror ("bsh");
 	}
 
+	/*
+		Last value should always be NULL
+	*/
 	array[position] = NULL;
 
 	return array;
@@ -133,16 +149,16 @@ char* getInput(int buffer_size){
 				printf("\033[%iD\033[%iC", bufferLength, bufferIndex - 1);
 
 			/*
-				Left Arrow
+				Right Arrow
 			*/
 			} else if (b == 'C'){
-				if (bufferIndex < buffer_size){
+				if (bufferIndex < bufferLength){
 					bufferIndex ++;
 					printf("\033[C");
 				}
 
 			/*
-				Right Arrow
+				Left Arrow
 			*/
 			} else if (b == 'D'){
 				if (bufferIndex > 0){
@@ -195,13 +211,21 @@ char* getInput(int buffer_size){
 				if (bufferIndex < bufferLength){
 					int copySize = (bufferLength - bufferIndex);
 
+					/*
+						Get everything after cursor
+					*/
 					char* after = malloc(sizeof(char) * copySize);
 					strncpy(after, buffer+bufferIndex, copySize);
 
+					/*
+						Insert key and copy `after` into buffer
+					*/
 					buffer[bufferIndex] = key;
 					strncpy(buffer+bufferIndex+1, after, copySize);
 
-					// if cursor is at beginning of line
+					/*
+						If cursor isn't at the beginning of line
+					*/
 					if (bufferIndex > 0){
 						printf("\033[%iD", bufferIndex);
 					}

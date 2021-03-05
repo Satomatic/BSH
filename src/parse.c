@@ -7,26 +7,6 @@
 #include "include/parse.h"
 #include "include/utils.h"
 
-char** parseInput(char** array){
-	int i = 0;
-	while (array[i] != NULL){
-		if (array[i][0] == '~'){
-			char* home = getenv("HOME");
-
-			char* newItem = malloc(sizeof(char) * (strlen(&array[i][0]) + strlen(home)));
-			strcpy(newItem, home);
-			strcpy(newItem + strlen(home), array[i]+1);
-
-			free(array[i]);
-			array[i] = newItem;
-		}
-
-		i++;
-	}
-
-	return array;
-}
-
 int nextToken(char* input, int start){
 	int end = strlen(input);
 
@@ -63,15 +43,22 @@ char** splitInput(char* input){
 
 	for (int i = 0; i < strlen(input); i++){
 		if (input[i] == '$'){
-			// get length of env variable name
+			/*
+				Get length of environment variable name
+			*/
 			int start = i + 1;
 			int end = nextToken(input, start);
 
+			/*
+				Get environment variable
+			*/
 			char* envname = malloc(sizeof(char) * (end - start));
 			strncpy(envname, input+start, end-start);
 			char* value = getenv(envname);
 
-			// copy into the token
+			/*
+				Copy the variable content into the token
+			*/
 			strcpy(token+tokenindex, value);
 			tokenindex += strlen(value);
 			i = end - 1;
@@ -82,26 +69,34 @@ char** splitInput(char* input){
 			int start = i + 2;
 			int end = nextToken(input, start);
 
-			// get file extension from token
+			/*
+				Get file extension from token
+			*/
 			char* fileext = malloc(sizeof(char) * (end - start) + 1);
 			memset(fileext, 0, sizeof(char) * (end - start));
 			strncpy(fileext, input+start, end-start);
 
 			char* directory = token;
 
-			// if no directory, give current
+			/*
+				If no directory specified, use current directory
+			*/
 			if (strlen(token) == 0){
 				directory = "./";
 			}
 
-			// get directory listing
+			/*
+				For each file in directory
+			*/
 			char** listing = listdir(directory);
 
 			int x = 0;
 			while (listing[x] != NULL){
-				// if file has matching extension, insert as token
 				const char* extension = getextension(listing[x]);
 				
+				/*
+					If file has matching extension, insert as a new token
+				*/
 				if (strcmp(extension, fileext) == 0 && strlen(extension) > 0){
 					newToken(array, listing[x], &position, &tokenindex);
 				}
@@ -111,7 +106,18 @@ char** splitInput(char* input){
 
 			i = end - 1;
 
+			/*
+				Clear the rest of the token
+			*/
+			memset(token, 0, tokenmax);
+			tokenindex = 0;
+
 			free(fileext);
+
+		} else if (input[i] == '~'){
+			char* home = getenv("HOME");
+			strcpy(token+tokenindex, home);
+			tokenindex += strlen(home);
 
 		} else if (input[i] == '\\'){
 			if (

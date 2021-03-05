@@ -42,7 +42,7 @@ int command_history_max = 100;
 int debug = 0;
 
 int main (int argc, char** argv){
-	if (strcmp(argv[0], "a.out") == 0){
+	if (strcmp(argv[0], "./a.out") == 0){
 		debug = 1;
 	}
 
@@ -70,7 +70,6 @@ int main (int argc, char** argv){
 		*/
 		char* input = getInput(512);
 		char** array = splitInput(input);
-		parseInput(array);
 
 		if (array[0] == NULL) continue;
 
