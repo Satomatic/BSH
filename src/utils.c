@@ -7,6 +7,7 @@
 #include "include/history.h"
 #include "include/global.h"
 #include "include/utils.h"
+#include "include/auto.h"
 
 char** listdir(char* directory){
 	/*
@@ -24,8 +25,12 @@ char** listdir(char* directory){
 			/*
 				Copy file name into a string
 			*/
-			char* item = malloc(strlen(ent->d_name));
+			char* item = malloc(strlen(ent->d_name) + 1);
 			strcpy(item, ent->d_name);
+
+			if (ent->d_type == DT_DIR){
+				item[strlen(ent->d_name)] = '/';
+			}
 			
 			/*
 				Reallocate array with extended size
@@ -165,6 +170,21 @@ char* getInput(int buffer_size){
 					bufferIndex --;
 					printf("\033[D");
 				}
+			}
+
+		// tab key
+		} else if (key == 9){
+			if (bufferIndex > 0){
+				autoComplete(buffer);
+				
+				if (bufferIndex > 0) printf("\033[%iD", bufferIndex);
+				printf("%s ", buffer);
+				printf("\033[%iD", bufferLength);
+
+				if (bufferIndex - 1 > 0) printf("\033[%iC", bufferIndex - 1);
+				
+				bufferLength = strlen(buffer);
+				bufferIndex = bufferLength;
 			}
 
 		// return key

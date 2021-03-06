@@ -18,7 +18,7 @@ This project was made possible by studying the code of [`lsh`](https://github.co
 - [x] Command history
 - [ ] Pipe processing
 - [ ] STD In/Out redirect
-- [ ] Tab auto complete
+- [x] Tab auto complete
 - [ ] Config file
 - [ ] Support for ^Z (currently disabled)
 - [ ] Scripting language (Lua like? maybe)
