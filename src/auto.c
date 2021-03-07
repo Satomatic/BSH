@@ -32,8 +32,8 @@ void autoComplete(char* buffer){
 	/*
 		Create string with directory name
 	*/
-	char* directory = malloc(dirSize);
-	memset(directory, 0, dirSize);
+	char* directory = malloc(dirSize + 1);
+	memset(directory, 0, dirSize + 1);
 	strncpy(directory, buff, dirSize);
 
 	/*
@@ -41,7 +41,7 @@ void autoComplete(char* buffer){
 	*/
 	char* filename = malloc(100);
 	memset(filename, 0, 100);
-	strncpy(filename, buff+dirSize, 10);
+	strncpy(filename, buff+dirSize, strlen(buff+dirSize));
 
 	/*
 		If directory is not specified,

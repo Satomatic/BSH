@@ -25,7 +25,8 @@ char** listdir(char* directory){
 			/*
 				Copy file name into a string
 			*/
-			char* item = malloc(strlen(ent->d_name) + 1);
+			char* item = malloc(strlen(ent->d_name) + 2);
+			memset(item, 0, strlen(ent->d_name) + 2);
 			strcpy(item, ent->d_name);
 
 			if (ent->d_type == DT_DIR){
