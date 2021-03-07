@@ -66,30 +66,41 @@ int main (int argc, char** argv){
 		printf(promptTemplate, user, cdir);
 
 		/*
-			Take in user input
+			Take in user input and split at '&'
 		*/
 		char* input = getInput(512);
-		char** array = splitInput(input);
-
-		if (array[0] == NULL) continue;
-
+		char** commands = splitCommand(input);
+		
 		/*
-			Check for build in functions
+			For every command
 		*/
-		int found = 0;
-		for (int i = 0; i < builtinlen(); i++){
-			if (strcmp(array[0], builtins_str[i]) == 0){
-				(*builtins_func[i])(array);
-				found = 1;
-				break;
+		for (int i = 0; commands[i] != NULL; i++){
+			char** array = splitInput(commands[i]);
+
+			if (array[0] == NULL) continue;
+
+			/*
+				Check for build in functions
+			*/
+			int found = 0;
+			for (int i = 0; i < builtinlen(); i++){
+				if (strcmp(array[0], builtins_str[i]) == 0){
+					(*builtins_func[i])(array);
+					found = 1;
+					break;
+				}
 			}
+
+			/*
+				If no builtins were found, execute
+			*/
+			if (found == 0){
+				exec(array);
+			}
+		
+			free(array);
 		}
 
-		if (found == 0){
-			exec(array);
-		}
-
-		free(array);
 		free(input);
 	}
 

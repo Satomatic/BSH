@@ -7,6 +7,68 @@
 #include "include/parse.h"
 #include "include/utils.h"
 
+/*
+	Split input at '&' to execute multiple
+	commands in one line
+*/
+char** splitCommand(char* input){
+	char** array = malloc(sizeof(char*));
+	char* citem = malloc(1);
+	
+	int arraypos = 0;
+	int citempos = 0;
+	int i = 0;
+
+	//for (int i = 0; input[i] != '\0'; i++){
+	while (1){
+		if (input[i] == '\\' && input[i + 1] == '&'){
+			citem = realloc(citem, citempos + 1);
+			citem[citempos] = input[i + 1];
+			citempos ++;
+
+			i ++;
+	
+		} else if (input[i] == '&' || (input[i] == '\0' && citempos > 0)){
+			/*
+				Copy item into new string
+			*/
+			char* item = malloc(strlen(citem) + 1);
+			memset(item, 0, strlen(citem) + 1);
+			strcpy(item, citem);
+
+			/*
+				Allocate new slot in array
+			*/
+			array = realloc(array, sizeof(char*) * (arraypos + 2));
+			array[arraypos] = item;
+			arraypos ++;
+
+			/*
+				Free current item
+			*/
+			free(citem);
+			citem = malloc(1);
+			citempos = 0;
+
+		} else {
+			citem = realloc(citem, citempos + 1);
+			citem[citempos] = input[i];
+			citempos ++;
+		}
+
+		if (input[i] == '\0') break;
+
+		i++;
+	}
+
+	/*
+		Last item in an array should always be NULL
+	*/
+	array[arraypos] = NULL;
+
+	return array;
+}
+
 int nextToken(char* input, int start){
 	int end = strlen(input);
 
@@ -42,8 +104,17 @@ char** splitInput(char* input){
 	memset(token, 0, tokenmax);
 
 	bool stringMode = false;
+	bool foundChar = false;
 
 	for (int i = 0; i < strlen(input); i++){
+		if (foundChar == false){
+			if (isalpha(input[i])){
+				foundChar = true;
+			} else {
+				continue;
+			}
+		}
+		
 		if (input[i] == '$'){
 			/*
 				Get length of environment variable name
@@ -138,6 +209,7 @@ char** splitInput(char* input){
 
 		} else if (input[i] == ' ' && strlen(token) != 0){
 			newToken(array, token, &position, &tokenindex);
+			foundChar = false;
 
 		} else if (input[i] == '"'){
 			stringMode = !stringMode;

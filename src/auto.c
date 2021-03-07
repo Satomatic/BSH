@@ -39,8 +39,8 @@ void autoComplete(char* buffer){
 	/*
 		Create a string with filename
 	*/
-	char* filename = malloc(100);
-	memset(filename, 0, 100);
+	char* filename = malloc(strlen(buff+dirSize) + 1);
+	memset(filename, 0, strlen(buff+dirSize) + 1);
 	strncpy(filename, buff+dirSize, strlen(buff+dirSize));
 
 	/*
