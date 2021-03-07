@@ -39,6 +39,7 @@ char** splitInput(char* input){
 
 	char** array = malloc(sizeof(char*) * buffersize);
 	char* token = malloc(sizeof(char) * tokenmax);
+	memset(token, 0, tokenmax);
 
 	bool stringMode = false;
 
