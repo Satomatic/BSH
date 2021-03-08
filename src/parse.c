@@ -108,7 +108,10 @@ char** splitInput(char* input){
 
 	for (int i = 0; i < strlen(input); i++){
 		if (foundChar == false){
-			if (isalpha(input[i])){
+			if (isalpha(input[i]) ||
+				ispunct(input[i]) ||
+				isdigit(input[i])
+			){
 				foundChar = true;
 			} else {
 				continue;
