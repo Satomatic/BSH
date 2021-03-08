@@ -22,8 +22,13 @@ char** splitCommand(char* input){
 	//for (int i = 0; input[i] != '\0'; i++){
 	while (1){
 		if (input[i] == '\\' && input[i + 1] == '&'){
-			citem = realloc(citem, citempos + 1);
+			/*
+				Remember to plus 2, one for the new character and one for
+				the NULL terminator
+			*/
+			citem = realloc(citem, citempos + 2);
 			citem[citempos] = input[i + 1];
+			citem[citempos + 1] = '\0';
 			citempos ++;
 
 			i ++;
@@ -32,8 +37,8 @@ char** splitCommand(char* input){
 			/*
 				Copy item into new string
 			*/
-			char* item = malloc(strlen(citem) + 1);
-			memset(item, 0, strlen(citem) + 1);
+			char* item = malloc(strlen(citem) + 2);
+			memset(item, 0, strlen(citem) + 2);
 			strcpy(item, citem);
 
 			/*
@@ -51,8 +56,9 @@ char** splitCommand(char* input){
 			citempos = 0;
 
 		} else {
-			citem = realloc(citem, citempos + 1);
+			citem = realloc(citem, citempos + 2);
 			citem[citempos] = input[i];
+			citem[citempos + 1] = '\0';
 			citempos ++;
 		}
 
@@ -149,7 +155,7 @@ char** splitInput(char* input){
 				Get file extension from token
 			*/
 			char* fileext = malloc(sizeof(char) * (end - start) + 1);
-			memset(fileext, 0, sizeof(char) * (end - start));
+			memset(fileext, 0, sizeof(char) * (end - start) + 1);
 			strncpy(fileext, input+start, end-start);
 
 			char* directory = token;
@@ -175,6 +181,7 @@ char** splitInput(char* input){
 				*/
 				if (strcmp(extension, fileext) == 0 && strlen(extension) > 0){
 					newToken(array, listing[x], &position, &tokenindex);
+					foundChar = false;
 				}
 
 				x++;
