@@ -1,16 +1,15 @@
 #include <sys/stat.h>
-#include <config.h>
+#include <data/config.h>
 #include <parser.h>
-#include <iostream>
 #include <fstream>
 
 std::string Shell::ConfigPath = "~/.bshrc";
 std::vector <config_t> Shell::ShellConfig = {
     { "prompt_template",  "( $user ) [ $cwd ] ~$ " },
-    { "foreground_color", "" },
-    { "background_color", "" },
-    { "user_color",       "" },
-    { "cwd_color",        "" }
+    { "foreground_color", "0" },
+    { "background_color", "0" },
+    { "user_color",       "80" },
+    { "cwd_color",        "177" }
 };
 
 void Shell::InitConfig(){

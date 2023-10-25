@@ -19,7 +19,7 @@ std::string Shell::GetInput(std::string prompt, int limit) {
 		 *  it won't spring to many issues, although, this is by far
 		 *  not the best way to do it.
 		 */
-		printf("\r%s %s ",
+		printf("\r%s %s \b",
 			prompt.c_str(),
 			returnString.c_str()
 		);

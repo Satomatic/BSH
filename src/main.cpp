@@ -4,7 +4,7 @@
 #include <builtins.h>
 #include <serror.h>
 #include <exec.h>
-#include <config.h>
+#include <data/config.h>
 #include <iostream>
 
 std::vector <std::string> Shell::CommandHistory = {};
@@ -14,7 +14,7 @@ int main() {
 	Shell::InitConfig();
 
 	std::string PromptTemplate = Shell::GetConfigValue("prompt_template");
-	
+
 	/**
 	 *  @todo: Disable default signals
 	 */
@@ -24,7 +24,7 @@ int main() {
 	 */
 
 	while (Shell::Open) {
-		std::string input = Shell::GetInput(PromptTemplate, 248);
+		std::string input = Shell::GetInput(Shell::ParsePrompt(PromptTemplate), 248);
 
 		/**
 		 *  Very simple split operation to seperate multiple command
