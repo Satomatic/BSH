@@ -110,3 +110,42 @@ args_t Shell::ParseCommandList(std::string data){
 
     return returnVector;
 }
+
+/**
+ *  This function will take a command and split it up into
+ *  a list of arguments to get executed.
+ *  
+ *  This will account for escape sequences, "strings" and
+ *  'character strings'
+ */
+args_t Shell::ParseArgumentList(std::string data){
+    /**
+     *  Just like in ParseCommandList, we use these two booleans
+     *  to keep track of whether we are inside a string or not.
+    */
+    bool stringMode = false;
+    bool charMode = false;
+
+    args_t returnVector = {};
+    std::string currentValue = "";
+
+    for (int i = 0; i < data.size(); i++){
+        bool escapePre = (i >= 1 && data[i - 1] == '\\');
+    
+        if (data[i] == '"' && !escapePre) stringMode = !stringMode;
+        if (data[i] == '\'' && !escapePre) charMode = !charMode;
+
+        if (data[i] == ' ' && !stringMode && !stringMode && !escapePre){
+            returnVector.push_back(currentValue);
+            currentValue = "";
+            continue;
+        }
+
+        if (data[i] != '\\') currentValue += data[i];
+    }
+
+    if (currentValue.size() > 0)
+        returnVector.push_back(currentValue);
+
+    return returnVector;
+}

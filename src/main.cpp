@@ -21,10 +21,6 @@ int main(int argc, char** argv) {
 	 *  @todo: Disable default signals
 	 */
 
-	/**
-	 *  @todo: Format prompt
-	 */
-
 	while (Shell::Open) {
 		std::string input = Shell::GetInput(Shell::ParsePrompt(PromptTemplate), 248);
 
@@ -50,7 +46,9 @@ int main(int argc, char** argv) {
 		for (int i = 0; i < commandSplit.size(); i++){
 			// @todo: Remove leading and trailing white space
 			// @todo: Write out a full parser
-			args_t arguments = Utils::SplitString(commandSplit[i], " ");
+			//args_t arguments = Utils::SplitString(commandSplit[i], " ");
+
+			args_t arguments = Shell::ParseArgumentList(commandSplit[i]);
 
 			if (arguments.size() == 0) continue;
 
