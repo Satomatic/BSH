@@ -7,6 +7,8 @@ A simple but modern shell written in C++
 ## About
 This is the reincarnation of an old shell I write in C a couple of years ago. While my aim with this project isn't for it to be a fully feature complete and standard complying shell, I am expecting it to work just as well as any other shell would, with the added features I plan on implementing.
 
+## Notice
+At this time the shell isn't in much of a working state but that should change very soon.
 
 ## Features
 - [x] Basic input and execute

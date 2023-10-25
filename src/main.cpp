@@ -7,19 +7,31 @@
 #include <data/config.h>
 #include <utils.h>
 #include <iostream>
+#include <signal.h>
 #include <string.h>
+#include <data/arguments.h>
 
 std::vector <std::string> Shell::CommandHistory = {};
 bool Shell::Open = true;
 
 int main(int argc, char** argv) {
+	Shell::ProcessArguments(argv, argc);
 	Shell::InitConfig();
 
 	std::string PromptTemplate = Shell::GetConfigValue("prompt_template");
 
+	if (Shell::DebugMode){
+		std::cout << " ! BSH is running in debug mode !" << std::endl;
+	}
+
 	/**
-	 *  @todo: Disable default signals
+	 *  Unless we are starting in debug mode we will stop
+	 *  the signal interrupt and signal stop.
 	 */
+	if (!Shell::DebugMode){
+		signal(SIGINT, SIG_IGN);
+		signal(SIGTSTP, SIG_IGN);
+	}
 
 	while (Shell::Open) {
 		std::string input = Shell::GetInput(Shell::ParsePrompt(PromptTemplate), 248);
@@ -48,6 +60,7 @@ int main(int argc, char** argv) {
 			args_t arguments = Shell::ParseArgumentList(commandSplit[i]);
 
 			if (arguments.size() == 0) continue;
+			if (Shell::DebugMode) Shell::DebugInput(arguments);
 
 			bool f = false;
 			for (int b = 0; b < Shell::builtins.size() && !f; b++){
