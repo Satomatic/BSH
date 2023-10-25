@@ -1,5 +1,5 @@
 # BSH
-A simple shell written in C for research purposes
+A simple but modern shell written in C++
 
 <img src="https://i.imgur.com/tGnivG3.png" width="400">\
 **BSH running on MacOS in ITerm2**
