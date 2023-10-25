@@ -4,18 +4,17 @@
 #include <builtins.h>
 #include <serror.h>
 #include <exec.h>
+#include <config.h>
 #include <iostream>
 
 std::vector <std::string> Shell::CommandHistory = {};
-std::string Shell::PromptTemplate = "( user ) [ directory ] ~$ ";
-std::string Shell::PromptData = "";
 bool Shell::Open = true;
 
 int main() {
-	/**
-	 *  @todo: Load user config file
-	 */
+	Shell::InitConfig();
 
+	std::string PromptTemplate = Shell::GetConfigValue("prompt_template");
+	
 	/**
 	 *  @todo: Disable default signals
 	 */
@@ -25,7 +24,7 @@ int main() {
 	 */
 
 	while (Shell::Open) {
-		std::string input = Shell::GetInput(Shell::PromptTemplate, 248);
+		std::string input = Shell::GetInput(PromptTemplate, 248);
 
 		/**
 		 *  Very simple split operation to seperate multiple command

@@ -9,7 +9,8 @@ set(SOURCE_FILES "src/main.cpp" "src/include/global.h"
                  "src/parser.cpp" "src/include/parser.h"
                  "src/builtins.cpp" "src/include/builtins.h"
                  "src/error.cpp" "src/include/serror.h"
-                 "src/exec.cpp" "src/include/exec.h" )
+                 "src/exec.cpp" "src/include/exec.h" 
+                 "src/config.cpp" "src/include/config.h")
 
 # Add executable target with source files listed in SOURCE_FILES variable
 add_executable(bsh ${SOURCE_FILES})
