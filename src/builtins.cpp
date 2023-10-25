@@ -1,5 +1,6 @@
 #include <builtins.h>
 #include <iostream>
+#include <unistd.h>
 
 std::vector <builtin_t> Shell::builtins = {
     { "cd",   Shell::builtin_cd   },
@@ -9,6 +10,13 @@ std::vector <builtin_t> Shell::builtins = {
 };
 
 int Shell::builtin_cd(args_t args){
+    if (args.size() > 1){
+        chdir(args[1].c_str());
+        return 0;
+    }
+
+    // @todo: Display error code from libexplain
+
     return -1;
 }
 
