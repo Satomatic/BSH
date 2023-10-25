@@ -5,12 +5,14 @@
 #include <serror.h>
 #include <exec.h>
 #include <data/config.h>
+#include <utils.h>
 #include <iostream>
+#include <string.h>
 
 std::vector <std::string> Shell::CommandHistory = {};
 bool Shell::Open = true;
 
-int main() {
+int main(int argc, char** argv) {
 	Shell::InitConfig();
 
 	std::string PromptTemplate = Shell::GetConfigValue("prompt_template");
@@ -31,7 +33,8 @@ int main() {
 		 *  joint with '&&'. Currently this wont take into account
 		 *  escaping characters, but for now it works.
 		 */
-		std::vector <std::string> commandSplit = SplitString(input, "&&");
+		std::vector <std::string> commandSplit = Shell::ParseCommandList(input);
+		
 		std::cout << '\n';
 
 		/**
@@ -47,7 +50,7 @@ int main() {
 		for (int i = 0; i < commandSplit.size(); i++){
 			// @todo: Remove leading and trailing white space
 			// @todo: Write out a full parser
-			args_t arguments = SplitString(commandSplit[i], " ");
+			args_t arguments = Utils::SplitString(commandSplit[i], " ");
 
 			if (arguments.size() == 0) continue;
 

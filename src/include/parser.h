@@ -9,6 +9,4 @@ namespace Shell {
     std::string ParsePrompt(std::string);
 };
 
-std::vector <std::string> SplitString(std::string, std::string);
-
 #endif

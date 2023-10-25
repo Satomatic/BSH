@@ -1,6 +1,7 @@
 #include <sys/stat.h>
 #include <data/config.h>
 #include <parser.h>
+#include <utils.h>
 #include <fstream>
 
 std::string Shell::ConfigPath = "~/.bshrc";
@@ -54,7 +55,7 @@ void Shell::InitConfig(){
     std::string cline = "";
 
     while (getline(fileRead, cline)){
-        std::vector <std::string> split = SplitString(cline, "=");
+        std::vector <std::string> split = Utils::SplitString(cline, "=");
         if (split.size() == 1) split.push_back("");
         
         /**
