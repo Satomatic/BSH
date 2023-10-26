@@ -1,4 +1,5 @@
 #include <utils.h>
+#include <regex>
 
 std::vector <std::string> Utils::SplitString(std::string data, std::string split){
     std::vector <std::string> returnVector = {};
@@ -35,4 +36,14 @@ std::string Utils::format(std::string text, std::vector <std::string> fmt_list){
     }
 
     return returnString;
+}
+
+std::string Utils::StripLeadTail(std::string text){
+    /**
+     *  @todo: This could definitely be one expression but I suck
+     *         at regex so this will do for now.
+     */
+    text = std::regex_replace(text, std::regex("^ +"), "");
+    text = std::regex_replace(text, std::regex(" +$"), "");
+    return text;
 }

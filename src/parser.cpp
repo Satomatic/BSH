@@ -85,7 +85,7 @@ args_t Shell::ParseCommandList(std::string data){
         if (i + 2 <= data.size() && data.substr(i, 2) == "&&" &&
             !stringMode && !charMode && !escapePre
         ){
-            returnVector.push_back(currentValue);
+            returnVector.push_back(Utils::StripLeadTail(currentValue));
             currentValue = "";
 
             /**
@@ -106,7 +106,7 @@ args_t Shell::ParseCommandList(std::string data){
      *  can go ahead and push that to the return vector.
      */
     if (currentValue.size() > 0)
-        returnVector.push_back(currentValue);
+        returnVector.push_back(Utils::StripLeadTail(currentValue));
 
     return returnVector;
 }

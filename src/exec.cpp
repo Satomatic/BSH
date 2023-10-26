@@ -12,10 +12,12 @@ void Shell::exec(args_t args){
      *  const char** for execvp.
      */
     std::vector<char*> cstrings;
-    cstrings.reserve(args.size());
+    cstrings.reserve(args.size() + 1);
 
     for(size_t i = 0; i < args.size(); ++i)
         cstrings.push_back(const_cast<char*>(args[i].c_str()));
+
+	cstrings.push_back(nullptr);
 
     /**
      *  Now we've done that we can mkae a fork and execute
