@@ -1,6 +1,14 @@
 #include <utils.h>
 #include <regex>
 
+/**
+ *  Split string into vector of smaller strings
+ *
+ *  @param std::string Data to split
+ *  @param std::string String to split at
+ *
+ *  @return std::vector <std::string> Return vector
+ */
 std::vector <std::string> Utils::SplitString(std::string data, std::string split){
     std::vector <std::string> returnVector = {};
     std::string cdata = "";
@@ -22,6 +30,14 @@ std::vector <std::string> Utils::SplitString(std::string data, std::string split
     return returnVector;
 }
 
+/**
+ *  Format string given a list of other strings
+ *
+ *  @param std::string String to format
+ *  @param std::vector <std::string> List of sub strings
+ *
+ *  @return std::string Formatted string
+ */
 std::string Utils::format(std::string text, std::vector <std::string> fmt_list){
     int fmt_index = 0;
     std::string returnString = "";
@@ -38,6 +54,12 @@ std::string Utils::format(std::string text, std::vector <std::string> fmt_list){
     return returnString;
 }
 
+/**
+ *  Remove whitespace from lead and tail of string
+ *
+ *  @param std::string String to strip
+ *  @return std::string Stripped string
+ */
 std::string Utils::StripLeadTail(std::string text){
     /**
      *  @todo: This could definitely be one expression but I suck

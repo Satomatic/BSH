@@ -77,7 +77,8 @@ void Shell::InitConfig(){
          *  This should never really happen, if it does
          *  then theres a bad key somewhere.
          */
-        if (f == true) continue;
+        if (f == true)
+            continue;
         
         Shell::ShellConfig.push_back(
             {split[0], split[1]}

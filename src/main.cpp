@@ -20,9 +20,8 @@ int main(int argc, char** argv) {
 
 	std::string PromptTemplate = Shell::GetConfigValue("prompt_template");
 
-	if (Shell::DebugMode){
-		std::cout << " ! BSH is running in debug mode !" << std::endl;
-	}
+	if (Shell::DebugMode)
+		std::cout << "\033[1m ! BSH is running in debug mode ! \033[0m" << std::endl;
 
 	/**
 	 *  Unless we are starting in debug mode we will stop
@@ -33,8 +32,13 @@ int main(int argc, char** argv) {
 		signal(SIGTSTP, SIG_IGN);
 	}
 
+    /**
+     *  Main shell loop
+     */
 	while (Shell::Open) {
 		std::string input = Shell::GetInput(Shell::ParsePrompt(PromptTemplate), 248);
+
+        Shell::CommandHistory.push_back(input);
 
 		/**
 		 *  Very simple split operation to seperate multiple command
@@ -48,20 +52,21 @@ int main(int argc, char** argv) {
 		/**
 		 *  For each command, we need to seperate it into indevidual
 		 *  arguments.
-		 * 
-		 *  We will also remove any whitespace surrounding the commands
-		 *  to avoid any issues.
-		 * 
-		 *  Just for testing I'm going to use a simple string split, then
-		 *  once proof of concept is finished we can make a proper parser.
 		 */
 		for (int i = 0; i < commandSplit.size(); i++){
 			// @todo: Remove leading and trailing white space
 			args_t arguments = Shell::ParseArgumentList(commandSplit[i]);
 
-			if (arguments.size() == 0) continue;
-			if (Shell::DebugMode) Shell::DebugInput(arguments);
+			if (arguments.size() == 0)
+                continue;
+			
+            if (Shell::DebugMode)
+                Shell::DebugInput(arguments);
 
+            /**
+             *  Check for builtin functions before attempting command
+             *  execution.
+             */
 			bool f = false;
 			for (int b = 0; b < Shell::builtins.size() && !f; b++){
 				if (Shell::builtins[b].command == arguments[0]){
@@ -71,9 +76,12 @@ int main(int argc, char** argv) {
 				}
 			}
 
-			if (!f){
+            /**
+             *  If a builtin function wasn't found then we execute as a
+             *  command.
+             */
+			if (!f)
 				Shell::exec(arguments);
-			}
 		}
 	}
 }

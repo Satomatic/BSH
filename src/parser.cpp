@@ -17,18 +17,24 @@ std::string Shell::ParsePrompt(std::string data){
     std::string pc_template = "\033[38;5;$m$\033[0m";
 
     std::string name_replacer = Utils::format(PROMPT_KEY_REPLACER, {
-        Shell::ShellConfig[3].value,
+        Shell::GetConfigValue("user_color"),
         getenv("USER")
     });
 
     std::string dirc_replacer = Utils::format(PROMPT_KEY_REPLACER, {
-        Shell::ShellConfig[4].value,
+        Shell::GetConfigValue("cwd_color"),
         getcwd(NULL, 0)
     });
 
+    /**
+     *  Replace the key words in the prompt template
+     */
     data = std::regex_replace(data, std::regex("\\$user"), name_replacer);
     data = std::regex_replace(data, std::regex("\\$cwd"), dirc_replacer);
 
+    /**
+     *  Apply foreground and background colours
+     */
     std::string returnString = Utils::format("\033[$m\033[$m", {
         Shell::ShellConfig[1].value,
         Shell::ShellConfig[2].value

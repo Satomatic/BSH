@@ -24,12 +24,35 @@ std::string Shell::GetInput(std::string prompt, int limit) {
 			returnString.c_str()
 		);
 
-		/**
-		 *  @todo: I would quite like to make this code work on windows
-		 *         though it does take input very differently so that
-		 *         will be a ball-ache.
-		 */
 		char key = getch();
+
+        /**
+         *  Processing for arrow keys
+         */
+        if (key == '\033'){
+            getch();
+            char direction = getch();
+
+            switch (direction){
+                // Up arrow
+                case 'A':
+                    break;
+
+                // Down arrow
+                case 'B':
+                    break;
+
+                // Left Arrow
+                case 'D':
+                    break;
+
+                // Right arrow
+                case 'C':
+                    break;
+            }
+
+            continue;
+        }
 
 		/**
 		 *  Using a switch might break a little when we get into special
@@ -37,24 +60,18 @@ std::string Shell::GetInput(std::string prompt, int limit) {
 		 *  we will cross that bridge when it comes.
 		 */
 		switch (key) {
-			case GETCH_RETURN:
+            // Return key
+            case '\n':
 				takingInput = false;
 				break;
 
-			/**
-			 *  @todo: This will eventually need to take into account the
-			 *         cursor position once arrow keys are sorted.
-			 */
-			case GETCH_BACKSAPCE:
+            // Backspace key
+			case '\b':
 				if (returnString.size() > 0)
 					returnString = returnString.substr(0, returnString.size() - 1);
 				break;
 
-			case GETCH_BACKSPACE_ALT:
-				if (returnString.size() > 0)
-					returnString = returnString.substr(0, returnString.size() - 1);
-				break;
-
+            // Any other key
 			default:
 				if (isascii(key))
 					returnString += key;
