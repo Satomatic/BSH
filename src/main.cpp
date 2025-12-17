@@ -20,6 +20,9 @@ bool Shell::Open = true;
 int main(int argc, char** argv) {
 	Shell::ProcessArguments(argv, argc);
 	Shell::InitConfig();
+    Shell::InitHistory();
+
+    int inputCount = 0;
 
 	std::string PromptTemplate = Shell::GetConfigValue("prompt_template");
 
@@ -42,6 +45,17 @@ int main(int argc, char** argv) {
 		std::string input = Shell::GetInput(Shell::ParsePrompt(PromptTemplate), 248);
 
         Shell::HistoryInsert(input);
+
+        /**
+         *  Every 5 commands we write the history to file, mainly so we
+         *  can optimize by not writing every input.
+         */
+        inputCount ++;
+
+        if (inputCount == 5){
+            Shell::SaveHistory();
+            inputCount = 0;
+        }
 
 		/**
 		 *  Very simple split operation to seperate multiple command

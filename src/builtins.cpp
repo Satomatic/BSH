@@ -2,6 +2,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <global.h>
+#include <history.h>
 
 std::vector <builtin_t> Shell::builtins = {
     { "cd",      Shell::builtin_cd      },
@@ -58,6 +59,7 @@ int Shell::builtin_history(args_t args){
     for (int i = 0; i < args.size(); i++){
         if (args[i] == "clear" || args[i] == "-c"){
             Shell::CommandHistory.clear();
+            Shell::SaveHistory();
             return 0;
         }
     }
@@ -72,6 +74,8 @@ int Shell::builtin_history(args_t args){
  *  Builtin exit command
  */
 int Shell::builtin_exit(args_t args){
+    Shell::SaveHistory();
+
     if (args.size() >= 2)
         exit(atoi(args[1].c_str()));
 
