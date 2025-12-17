@@ -1,14 +1,17 @@
+#include <iostream>
+#include <signal.h>
+#include <string.h>
+
 #include <global.h>
 #include <input.h>
 #include <parser.h>
 #include <builtins.h>
+#include <history.h>
 #include <serror.h>
-#include <exec.h>
-#include <data/config.h>
 #include <utils.h>
-#include <iostream>
-#include <signal.h>
-#include <string.h>
+#include <exec.h>
+
+#include <data/config.h>
 #include <data/arguments.h>
 
 std::vector <std::string> Shell::CommandHistory = {};
@@ -38,7 +41,7 @@ int main(int argc, char** argv) {
 	while (Shell::Open) {
 		std::string input = Shell::GetInput(Shell::ParsePrompt(PromptTemplate), 248);
 
-        Shell::CommandHistory.push_back(input);
+        Shell::HistoryInsert(input);
 
 		/**
 		 *  Very simple split operation to seperate multiple command

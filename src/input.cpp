@@ -1,4 +1,6 @@
 #include <input.h>
+#include <history.h>
+#include <global.h>
 
 #include <termios.h>
 #include <stdlib.h>
@@ -11,6 +13,8 @@ char getch(void);
 std::string Shell::GetInput(std::string prompt, int limit) {
 	std::string returnString = "";
 	bool takingInput = true;
+
+    std::string commandSave = "";
 
 	while (takingInput) {
 		/**
@@ -36,10 +40,37 @@ std::string Shell::GetInput(std::string prompt, int limit) {
             switch (direction){
                 // Up arrow
                 case 'A':
+                    printf("\r%s", prompt.c_str());
+                    for (int i = 0; i < returnString.size() + 5; i++)
+                        printf(" ");
+
+                    if (Shell::HistoryLength == 0)
+                        break;
+
+                    if (Shell::HistoryLength == Shell::HistoryIndex)
+                        commandSave = returnString;
+
+                    if (Shell::HistoryIndex > 0)
+                        Shell::HistoryIndex --;
+
+                    returnString = Shell::CommandHistory[Shell::HistoryIndex];
                     break;
 
                 // Down arrow
                 case 'B':
+                    printf("\r%s", prompt.c_str());
+                    for (int i = 0; i < returnString.size() + 5; i++)
+                        printf(" ");
+
+                    if (Shell::HistoryIndex < Shell::HistoryLength - 1){
+                        Shell::HistoryIndex ++;
+                        returnString = Shell::CommandHistory[Shell::HistoryIndex];
+                    
+                    } else {
+                        Shell::HistoryIndex = Shell::HistoryLength;
+                        returnString = commandSave;
+                    }
+
                     break;
 
                 // Left Arrow
