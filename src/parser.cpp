@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <regex>
 #include <utils.h>
+#include <git.h>
 
 #define PROMPT_KEY_REPLACER "\033[38;5;$m$\033[0m"
 
@@ -26,11 +27,17 @@ std::string Shell::ParsePrompt(std::string data){
         getcwd(NULL, 0)
     });
 
+    std::string gitr_replacer = Utils::format(PROMPT_KEY_REPLACER, {
+        Shell::GetConfigValue("git_color"),
+        Git::GetRepoString()
+    });
+
     /**
      *  Replace the key words in the prompt template
      */
     data = std::regex_replace(data, std::regex("\\$user"), name_replacer);
     data = std::regex_replace(data, std::regex("\\$cwd"), dirc_replacer);
+    data = std::regex_replace(data, std::regex("\\$git"), gitr_replacer);
 
     /**
      *  Apply foreground and background colours

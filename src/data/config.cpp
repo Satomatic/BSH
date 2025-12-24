@@ -6,11 +6,12 @@
 
 std::string Shell::ConfigPath = "~/.bshrc";
 std::vector <config_t> Shell::ShellConfig = {
-    { "prompt_template",  "( $user ) [ $cwd ] ~$ " },
-    { "foreground_color", "0" },
-    { "background_color", "0" },
-    { "user_color",       "80" },
-    { "cwd_color",        "177" }
+    { "prompt_template",  "( $user ) [ $cwd $git ] ~$ " },
+    { "foreground_color", "0"   },
+    { "background_color", "0"   },
+    { "user_color",       "80"  },
+    { "cwd_color",        "177" },
+    { "git_color",        "179" }
 };
 
 void Shell::InitConfig(){
