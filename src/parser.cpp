@@ -55,6 +55,24 @@ std::string Shell::ParsePrompt(std::string data){
  *  strings.
  */
 args_t Shell::ParseCommandList(std::string data){
+    
+    /**
+     *  This is a good time to replace the `~` character in the
+     *  input string with the full home path `/home/USER`.
+     */
+    std::string home_replace = "";
+    for (int i = 0; i < data.size(); i++){
+        if (data[i] == '~'){
+            home_replace += "/home/";
+            home_replace += getenv("USER");
+            continue;
+        }
+
+        home_replace += data[i];
+    }
+
+    data = home_replace;
+
     /**
      *  We will keep track of if we are inside a "string"
      *  or a 'character' as we don't want to interrupt that

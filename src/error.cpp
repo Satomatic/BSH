@@ -3,7 +3,9 @@
 #include <stdio.h>
 
 void Shell::HandleError(int err, args_t args){
-    printf("\033[1m'%s' returned with error code %d\033[0m\n", args[0].c_str(), err);
+    std::string e = "bsh: " + args[0];
+    perror(e.c_str());
+
 }
 
 void Shell::DebugInput(args_t args){

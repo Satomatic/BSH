@@ -14,7 +14,7 @@ At this time the shell isn't in much of a working state but that should change v
 - [x] Basic input and execute
 - [ ] Better input
 - [x] Better parsing
-- [ ] Command history
+- [x] Command history
 - [ ] Pipe processing
 - [ ] STD In/Out redirect
 - [ ] Tab auto complete

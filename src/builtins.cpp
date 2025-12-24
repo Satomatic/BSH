@@ -23,8 +23,7 @@ std::vector <help_definition_t> Shell::builtin_defs = {
  */
 int Shell::builtin_cd(args_t args){
     if (args.size() > 1){
-        chdir(args[1].c_str());
-        return 0;
+        return chdir(args[1].c_str());
     }
 
     return -1;
