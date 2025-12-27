@@ -97,6 +97,8 @@ std::string Shell::GetInput(std::string prompt, int limit) {
 				break;
 
             // Backspace key
+	    		case 27:
+			case 127:
 			case '\b':
 				if (returnString.size() > 0)
 					returnString = returnString.substr(0, returnString.size() - 1);
