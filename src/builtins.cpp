@@ -3,13 +3,15 @@
 #include <unistd.h>
 #include <global.h>
 #include <history.h>
+#include <data/config.h>
 
 std::vector <builtin_t> Shell::builtins = {
-    { "cd",      Shell::builtin_cd      },
-    { "help",    Shell::builtin_help    },
-    { "exit",    Shell::builtin_exit    },
-    { "test",    Shell::builtin_test    },
-    { "history", Shell::builtin_history }
+    { "cd",       Shell::builtin_cd      },
+    { "help",     Shell::builtin_help    },
+    { "exit",     Shell::builtin_exit    },
+    { "test",     Shell::builtin_test    },
+    { "history",  Shell::builtin_history },
+    { "reconfig", Shell::builtin_reconfig},
 };
 
 /**
@@ -17,10 +19,11 @@ std::vector <builtin_t> Shell::builtins = {
  *         includes more detail for commands with arguments.
  */
 std::vector <help_definition_t> Shell::builtin_defs = {
-    { "cd     ", "Change directory" },
-    { "help   ", "Shows help menu"  },
-    { "history", "Show the saved command history (-c to clear)"},
-    { "exit   ", "Exits the shell"  }
+    { "cd      ", "Change directory" },
+    { "help    ", "Shows help menu"  },
+    { "history ", "Show the saved command history (-c to clear)"},
+    { "reconfig", "Reload the configuration file"},
+    { "exit    ", "Exits the shell"  }
 };
 
 /**
@@ -84,6 +87,12 @@ int Shell::builtin_exit(args_t args){
         exit(atoi(args[1].c_str()));
 
     exit(0);
+}
+
+int Shell::builtin_reconfig(args_t args){
+    Shell::InitConfig();
+    std::cout << " @ Reloaded configuration file" << std::endl;
+    return 0;
 }
 
 int Shell::builtin_test(args_t args){

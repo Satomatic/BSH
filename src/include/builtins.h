@@ -20,6 +20,7 @@ namespace Shell {
     int builtin_exit(args_t);
     int builtin_test(args_t);
     int builtin_history(args_t);
+    int builtin_reconfig(args_t);
 
     extern std::vector <builtin_t> builtins;
     extern std::vector <help_definition_t> builtin_defs;

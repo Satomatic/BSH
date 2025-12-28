@@ -24,8 +24,6 @@ int main(int argc, char** argv) {
 
     int inputCount = 0;
 
-	std::string PromptTemplate = Shell::GetConfigValue("prompt_template");
-
 	if (Shell::DebugMode)
 		std::cout << "\033[1m ! BSH is running in debug mode ! \033[0m" << std::endl;
 
@@ -42,7 +40,10 @@ int main(int argc, char** argv) {
      *  Main shell loop
      */
 	while (Shell::Open) {
-		std::string input = Shell::GetInput(Shell::ParsePrompt(PromptTemplate), 248);
+		std::string input = Shell::GetInput(
+				Shell::ParsePrompt(Shell::GetConfigValue("prompt_template")), 
+				248
+				);
 
         Shell::HistoryInsert(input);
 
