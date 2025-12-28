@@ -41,7 +41,7 @@ void Shell::InitHistory(){
 void Shell::HistoryInsert(std::string command){
     Shell::CommandHistory.push_back(command);
     Shell::HistoryLength ++;
-    Shell::HistoryIndex ++;
+    Shell::HistoryIndex = Shell::HistoryLength;
 }
 
 void Shell::SaveHistory(){

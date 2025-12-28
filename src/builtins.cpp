@@ -12,10 +12,15 @@ std::vector <builtin_t> Shell::builtins = {
     { "history", Shell::builtin_history }
 };
 
+/**
+ *  @todo: I need to make a better structure for this that
+ *         includes more detail for commands with arguments.
+ */
 std::vector <help_definition_t> Shell::builtin_defs = {
-    { "cd  ", "Change directory" },
-    { "help", "Shows help menu"  },
-    { "exit", "Exits the shell"  }
+    { "cd     ", "Change directory" },
+    { "help   ", "Shows help menu"  },
+    { "history", "Show the saved command history (-c to clear)"},
+    { "exit   ", "Exits the shell"  }
 };
 
 /**
