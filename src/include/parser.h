@@ -4,9 +4,9 @@
 #include <global.h>
 
 namespace Shell {
-    std::vector <std::string> ParseCommandList(std::string);
-    args_t ParseArgumentList(std::string);
-    std::string ParsePrompt(std::string);
+	std::vector <std::string> ParseCommandList(std::string);
+	args_t ParseArgumentList(std::string);
+	std::string ParsePrompt(std::string);
 };
 
 #endif

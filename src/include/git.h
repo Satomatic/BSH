@@ -4,7 +4,7 @@
 #include <string>
 
 namespace Git {
-    std::string GetRepoString();
+	std::string GetRepoString();
 }
 
 #endif

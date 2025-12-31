@@ -13,20 +13,20 @@
  *         not to a horrible degree.
  */
 std::string Git::GetRepoString(){
-    char buffer[128];
-    std::string result = "";
+	char buffer[128];
+	std::string result = "";
 
-    FILE* p = popen("git branch 2>&1", "r");
+	FILE* p = popen("git branch 2>&1", "r");
 
-    while (fgets(buffer, 128, p) != NULL)
-        result += buffer;
+	while (fgets(buffer, 128, p) != NULL)
+		result += buffer;
 
-    int err = pclose(p);
+	int err = pclose(p);
 
-    result = result.substr(0, result.size() - 1);
+	result = result.substr(0, result.size() - 1);
 
-    if (err != 0)
-        return "\b";
+	if (err != 0)
+		return "\b";
 
-    return result;
+	return result;
 }

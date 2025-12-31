@@ -20,9 +20,9 @@ bool Shell::Open = true;
 int main(int argc, char** argv) {
 	Shell::ProcessArguments(argv, argc);
 	Shell::InitConfig();
-    Shell::InitHistory();
+	Shell::InitHistory();
 
-    int inputCount = 0;
+	int inputCount = 0;
 
 	if (Shell::DebugMode)
 		std::cout << "\033[1m ! BSH is running in debug mode ! \033[0m" << std::endl;
@@ -36,27 +36,27 @@ int main(int argc, char** argv) {
 		signal(SIGTSTP, SIG_IGN);
 	}
 
-    /**
-     *  Main shell loop
-     */
+	/**
+	 *  Main shell loop
+	 */
 	while (Shell::Open) {
 		std::string input = Shell::GetInput(
 				Shell::ParsePrompt(Shell::GetConfigValue("prompt_template")), 
 				248
 				);
 
-        Shell::HistoryInsert(input);
+		Shell::HistoryInsert(input);
 
-        /**
-         *  Every 5 commands we write the history to file, mainly so we
-         *  can optimize by not writing every input.
-         */
-        inputCount ++;
+		/**
+		 *  Every 5 commands we write the history to file, mainly so we
+		 *  can optimize by not writing every input.
+		 */
+		inputCount ++;
 
-        if (inputCount == 5){
-            Shell::SaveHistory();
-            inputCount = 0;
-        }
+		if (inputCount == 5){
+			Shell::SaveHistory();
+			inputCount = 0;
+		}
 
 		/**
 		 *  Very simple split operation to seperate multiple command
@@ -76,15 +76,15 @@ int main(int argc, char** argv) {
 			args_t arguments = Shell::ParseArgumentList(commandSplit[i]);
 
 			if (arguments.size() == 0)
-                continue;
+				continue;
 			
-            if (Shell::DebugMode)
-                Shell::DebugInput(arguments);
+			if (Shell::DebugMode)
+				Shell::DebugInput(arguments);
 
-            /**
-             *  Check for builtin functions before attempting command
-             *  execution.
-             */
+			/**
+			 *  Check for builtin functions before attempting command
+			 *  execution.
+			 */
 			bool f = false;
 			for (int b = 0; b < Shell::builtins.size() && !f; b++){
 				if (Shell::builtins[b].command == arguments[0]){
@@ -94,10 +94,10 @@ int main(int argc, char** argv) {
 				}
 			}
 
-            /**
-             *  If a builtin function wasn't found then we execute as a
-             *  command.
-             */
+			/**
+			 *  If a builtin function wasn't found then we execute as a
+			 *  command.
+			 */
 			if (!f)
 				Shell::exec(arguments);
 		}

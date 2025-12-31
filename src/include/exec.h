@@ -4,7 +4,7 @@
 #include <global.h>
 
 namespace Shell {
-    void exec(args_t);
+	void exec(args_t);
 }
 
 #endif

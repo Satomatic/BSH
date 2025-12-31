@@ -5,18 +5,18 @@
 #include <vector>
 
 typedef struct {
-    std::string key;
-    std::string value;
+	std::string key;
+	std::string value;
 } config_t;
 
 namespace Shell {
-    extern std::string ConfigPath;
-    extern std::vector <config_t> ShellConfig;
+	extern std::string ConfigPath;
+	extern std::vector <config_t> ShellConfig;
 
-    void InitConfig();
+	void InitConfig();
 
-    std::string GetConfigValue(std::string);
-    void SetConfigValue(std::string, std::string);
+	std::string GetConfigValue(std::string);
+	void SetConfigValue(std::string, std::string);
 };
 
 #endif

@@ -4,9 +4,9 @@
 #include <global.h>
 
 namespace Shell {
-    extern bool DebugMode;
+	extern bool DebugMode;
 
-    void ProcessArguments(char**, int);
+	void ProcessArguments(char**, int);
 };
 
 #endif

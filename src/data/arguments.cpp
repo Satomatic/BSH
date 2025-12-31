@@ -8,9 +8,9 @@ bool Shell::DebugMode = false;
  *  shell when it is ran.
  */
 void Shell::ProcessArguments(char** argv, int argc){
-    for (int i = 1; i < argc; i++){
-        if (strcmp(argv[i], "--debug") == 0){
-            Shell::DebugMode = true;
-        }
-    }
+	for (int i = 1; i < argc; i++){
+		if (strcmp(argv[i], "--debug") == 0){
+			Shell::DebugMode = true;
+		}
+	}
 }

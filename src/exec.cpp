@@ -5,24 +5,24 @@
 #include <sys/wait.h>
 
 void Shell::exec(args_t args){
-    /**
-     *  Up until this point we have been using the very
-     *  convinient std::vector to store our arguments.
-     *  But now we need to convert them to a regular old
-     *  const char** for execvp.
-     */
-    std::vector<char*> cstrings;
-    cstrings.reserve(args.size() + 1);
+	/**
+	 *  Up until this point we have been using the very
+	 *  convinient std::vector to store our arguments.
+	 *  But now we need to convert them to a regular old
+	 *  const char** for execvp.
+	 */
+	std::vector<char*> cstrings;
+	cstrings.reserve(args.size() + 1);
 
-    for(size_t i = 0; i < args.size(); ++i)
-        cstrings.push_back(const_cast<char*>(args[i].c_str()));
+	for(size_t i = 0; i < args.size(); ++i)
+		cstrings.push_back(const_cast<char*>(args[i].c_str()));
 
 	cstrings.push_back(nullptr);
 
-    /**
-     *  Now we've done that we can mkae a fork and execute
-     *  the command with arguments.
-     */
+	/**
+	 *  Now we've done that we can mkae a fork and execute
+	 *  the command with arguments.
+	 */
 	pid_t pid, wpid;
 	int status;
 
@@ -42,7 +42,7 @@ void Shell::exec(args_t args){
 
 	} else {
 		do {
-		  	wpid = waitpid(pid, &status, WUNTRACED);
+			wpid = waitpid(pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 }

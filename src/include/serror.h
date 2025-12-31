@@ -4,8 +4,8 @@
 #include <global.h>
 
 namespace Shell {
-    void HandleError(int, args_t);
-    void DebugInput(args_t);
+	void HandleError(int, args_t);
+	void DebugInput(args_t);
 }
 
 #endif

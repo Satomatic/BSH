@@ -15,41 +15,41 @@
  *  which are also defined in the config file.
 */
 std::string Shell::ParsePrompt(std::string data){
-    std::string pc_template = "\033[38;5;$m$\033[0m";
+	std::string pc_template = "\033[38;5;$m$\033[0m";
 
-    std::string name_replacer = Utils::format(PROMPT_KEY_REPLACER, {
-        Shell::GetConfigValue("user_color"),
-        getenv("USER")
-    });
+	std::string name_replacer = Utils::format(PROMPT_KEY_REPLACER, {
+		Shell::GetConfigValue("user_color"),
+		getenv("USER")
+	});
 
-    std::string dirc_replacer = Utils::format(PROMPT_KEY_REPLACER, {
-        Shell::GetConfigValue("cwd_color"),
-        getcwd(NULL, 0)
-    });
+	std::string dirc_replacer = Utils::format(PROMPT_KEY_REPLACER, {
+		Shell::GetConfigValue("cwd_color"),
+		getcwd(NULL, 0)
+	});
 
-    std::string gitr_replacer = Utils::format(PROMPT_KEY_REPLACER, {
-        Shell::GetConfigValue("git_color"),
-        Git::GetRepoString()
-    });
+	std::string gitr_replacer = Utils::format(PROMPT_KEY_REPLACER, {
+		Shell::GetConfigValue("git_color"),
+		Git::GetRepoString()
+	});
 
-    /**
-     *  Replace the key words in the prompt template
-     */
-    data = std::regex_replace(data, std::regex("\\$user"), name_replacer);
-    data = std::regex_replace(data, std::regex("\\$cwd"), dirc_replacer);
-    data = std::regex_replace(data, std::regex("\\$git"), gitr_replacer);
+	/**
+	 *  Replace the key words in the prompt template
+	 */
+	data = std::regex_replace(data, std::regex("\\$user"), name_replacer);
+	data = std::regex_replace(data, std::regex("\\$cwd"), dirc_replacer);
+	data = std::regex_replace(data, std::regex("\\$git"), gitr_replacer);
 
-    /**
-     *  Apply foreground and background colours
-     */
-    std::string returnString = Utils::format("\033[$m\033[$m", {
-        Shell::ShellConfig[1].value,
-        Shell::ShellConfig[2].value
-    });
+	/**
+	 *  Apply foreground and background colours
+	 */
+	std::string returnString = Utils::format("\033[$m\033[$m", {
+		Shell::ShellConfig[1].value,
+		Shell::ShellConfig[2].value
+	});
 
-    returnString += data + "\033[0m";
+	returnString += data + "\033[0m";
 
-    return returnString;
+	return returnString;
 }
 
 /**
@@ -62,84 +62,84 @@ std::string Shell::ParsePrompt(std::string data){
  *  strings.
  */
 args_t Shell::ParseCommandList(std::string data){
-    
-    /**
-     *  This is a good time to replace the `~` character in the
-     *  input string with the full home path `/home/USER`.
-     */
-    std::string home_replace = "";
-    for (int i = 0; i < data.size(); i++){
-        if (data[i] == '~'){
-            home_replace += "/home/";
-            home_replace += getenv("USER");
-            continue;
-        }
+	
+	/**
+	 *  This is a good time to replace the `~` character in the
+	 *  input string with the full home path `/home/USER`.
+	 */
+	std::string home_replace = "";
+	for (int i = 0; i < data.size(); i++){
+		if (data[i] == '~'){
+			home_replace += "/home/";
+			home_replace += getenv("USER");
+			continue;
+		}
 
-        home_replace += data[i];
-    }
+		home_replace += data[i];
+	}
 
-    data = home_replace;
+	data = home_replace;
 
-    /**
-     *  We will keep track of if we are inside a "string"
-     *  or a 'character' as we don't want to interrupt that
-     *  data.
-     */
-    bool stringMode = false;
-    bool charMode = false;
+	/**
+	 *  We will keep track of if we are inside a "string"
+	 *  or a 'character' as we don't want to interrupt that
+	 *  data.
+	 */
+	bool stringMode = false;
+	bool charMode = false;
 
-    args_t returnVector = {};
+	args_t returnVector = {};
 
-    std::string currentValue = "";
+	std::string currentValue = "";
 
-    for (int i = 0; i < data.size(); i++){
-        /**
-         *  If the previous character is '\' then we
-         *  don't need to apply any rules to the current
-         *  character and should treat it as literal.
-         */
-        bool escapePre = (i >= 1 && data[i - 1] == '\\');
-        
-        /**
-         *  Assuming the previous character isn't '\' then
-         *  we need to enter / escape stringMode and charMode
-         *  when we reach their relevent characters.
-         */
-        if (data[i] == '"' && !escapePre) stringMode = !stringMode;
-        if (data[i] == '\'' && !escapePre) charMode = !charMode;
+	for (int i = 0; i < data.size(); i++){
+		/**
+		 *  If the previous character is '\' then we
+		 *  don't need to apply any rules to the current
+		 *  character and should treat it as literal.
+		 */
+		bool escapePre = (i >= 1 && data[i - 1] == '\\');
+		
+		/**
+		 *  Assuming the previous character isn't '\' then
+		 *  we need to enter / escape stringMode and charMode
+		 *  when we reach their relevent characters.
+		 */
+		if (data[i] == '"' && !escapePre) stringMode = !stringMode;
+		if (data[i] == '\'' && !escapePre) charMode = !charMode;
 
-        /**
-         *  Assuming we aren't in a string, character string, and
-         *  the previous character doesn't escape. If we have
-         *  reached '&&' then we need to split.
-         */
-        if (i + 2 <= data.size() && data.substr(i, 2) == "&&" &&
-            !stringMode && !charMode && !escapePre
-        ){
-            returnVector.push_back(Utils::StripLeadTail(currentValue));
-            currentValue = "";
+		/**
+		 *  Assuming we aren't in a string, character string, and
+		 *  the previous character doesn't escape. If we have
+		 *  reached '&&' then we need to split.
+		 */
+		if (i + 2 <= data.size() && data.substr(i, 2) == "&&" &&
+			!stringMode && !charMode && !escapePre
+		){
+			returnVector.push_back(Utils::StripLeadTail(currentValue));
+			currentValue = "";
 
-            /**
-             *  It is also important that we skip past the next
-             *  character so it doesn't get picked up and added
-             *  into the next command.
-             */
-            i ++;
+			/**
+			 *  It is also important that we skip past the next
+			 *  character so it doesn't get picked up and added
+			 *  into the next command.
+			 */
+			i ++;
 
-            continue;
-        }
+			continue;
+		}
 
-        currentValue += data[i];
-    }
+		currentValue += data[i];
+	}
 
-    /**
-     *  If there are any value left in 'currentValue' then we
-     *  can go ahead and push that to the return vector.
-     */
-    if (currentValue.size() > 0)
-        returnVector.push_back(Utils::StripLeadTail(currentValue));
+	/**
+	 *  If there are any value left in 'currentValue' then we
+	 *  can go ahead and push that to the return vector.
+	 */
+	if (currentValue.size() > 0)
+		returnVector.push_back(Utils::StripLeadTail(currentValue));
 
-    return returnVector;
+	return returnVector;
 }
 
 /**
@@ -150,33 +150,33 @@ args_t Shell::ParseCommandList(std::string data){
  *  'character strings'
  */
 args_t Shell::ParseArgumentList(std::string data){
-    /**
-     *  Just like in ParseCommandList, we use these two booleans
-     *  to keep track of whether we are inside a string or not.
-    */
-    bool stringMode = false;
-    bool charMode = false;
+	/**
+	 *  Just like in ParseCommandList, we use these two booleans
+	 *  to keep track of whether we are inside a string or not.
+	*/
+	bool stringMode = false;
+	bool charMode = false;
 
-    args_t returnVector = {};
-    std::string currentValue = "";
+	args_t returnVector = {};
+	std::string currentValue = "";
 
-    for (int i = 0; i < data.size(); i++){
-        bool escapePre = (i >= 1 && data[i - 1] == '\\');
-    
-        if (data[i] == '"' && !escapePre) stringMode = !stringMode;
-        if (data[i] == '\'' && !escapePre) charMode = !charMode;
+	for (int i = 0; i < data.size(); i++){
+		bool escapePre = (i >= 1 && data[i - 1] == '\\');
+	
+		if (data[i] == '"' && !escapePre) stringMode = !stringMode;
+		if (data[i] == '\'' && !escapePre) charMode = !charMode;
 
-        if (data[i] == ' ' && !stringMode && !stringMode && !escapePre){
-            returnVector.push_back(currentValue);
-            currentValue = "";
-            continue;
-        }
+		if (data[i] == ' ' && !stringMode && !stringMode && !escapePre){
+			returnVector.push_back(currentValue);
+			currentValue = "";
+			continue;
+		}
 
-        if (data[i] != '\\') currentValue += data[i];
-    }
+		if (data[i] != '\\') currentValue += data[i];
+	}
 
-    if (currentValue.size() > 0)
-        returnVector.push_back(currentValue);
+	if (currentValue.size() > 0)
+		returnVector.push_back(currentValue);
 
-    return returnVector;
+	return returnVector;
 }
